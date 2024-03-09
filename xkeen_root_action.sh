@@ -122,7 +122,7 @@ echo
 echo -e "    ${GREEN}bbr включен.${NC}"
 echo
 echo -e "    ${RED}!!!ВНИМАНИЕ!!!${NC}"
-echo -e "    ${GREEN}Порт подключения по SSH изменен на:${NC} ${RED}$ssh_port${NC}"
+echo -e "    ${GREEN}Порт подключения SSH изменен на:${NC} ${RED}$ssh_port${NC}"
 echo -e "    ${GREEN}Пользователю root отключена возможность подключения по SSH ${NC} ${RED}отключена!${NC}"
 echo
 # Обратный отсчет
