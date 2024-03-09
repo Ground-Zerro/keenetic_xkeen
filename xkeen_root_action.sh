@@ -119,11 +119,11 @@ clear
 echo
 echo -e "    ${BLUE}Оптимизация сервера выполнена.${NC}"
 echo
-echo -e "    ${GREEN}bbr включен.${NC}"
+echo -e "    ${BLUE}BBR - включен.${NC}"
 echo
 echo -e "    ${RED}!!!ВНИМАНИЕ!!!${NC}"
-echo -e "    ${GREEN}Порт подключения SSH изменен на:${NC} ${RED}$ssh_port${NC}"
-echo -e "    ${GREEN}Пользователю root отключена возможность подключения по SSH ${NC} ${RED}отключена!${NC}"
+echo -e "    ${GREEN}Порт подключения SSH изменен на:${NC} ${RED}$ssh_port.${NC}"
+echo -e "    ${GREEN}Пользователю ${RED}root${NC} ${GREEN}возможность подключения по SSH${NC} ${RED}заблокированна.${NC}"
 echo
 # Обратный отсчет
 for ((i=5; i>=0; i--)); do
