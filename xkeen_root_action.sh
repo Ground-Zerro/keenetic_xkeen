@@ -121,11 +121,13 @@ echo -e "    ${BLUE}Оптимизация сервера выполнена.${N
 echo
 echo -e "    ${GREEN}bbr включен.${NC}"
 echo
-echo -e "    ${RED}!!!ВНИМАНИЕ!!!${NC} Порт подключения по SSH изменен на: ${RED}$ssh_port${NC}"
+echo -e "    ${RED}!!!ВНИМАНИЕ!!!${NC}"
+echo -e "    ${GREEN}Порт подключения по SSH изменен на:${NC} ${RED}$ssh_port${NC}"
+echo -e "    ${GREEN}Возможность подключения по SSH пользователем root${NC} ${RED}отключена!${NC}"
 echo
 # Обратный отсчет
-for ((i=10; i>=0; i--)); do
-    if [ $i -eq 10 ]; then
+for ((i=5; i>=0; i--)); do
+    if [ $i -eq 5 ]; then
         echo -ne "Сервер будет перезагружен через: $i\r"
     elif [ $i -eq 0 ]; then
         echo -ne "Сервер будет перезагружен через: $i\n"
