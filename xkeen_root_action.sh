@@ -6,24 +6,26 @@ GREEN='\033[0;32m' # Зеленый
 RED='\033[0;31m'   # Красный
 NC='\033[0m'       # Сброс цвета
 
-# Проверка, что пользователь является root
+# Проверка root полномочий пользователя
 if [[ $EUID -ne 0 ]]; then
-    echo "У текущего пользователя недостаточно прав, зайдите под пользователем root"
+    echo "$(echo -e "${GREEN}Недостаточно полномочий, запускать скрипт необходимо от имени пользователя с ${RED}root ${GREEN}правами!${NC}")"
     exit 1
 fi
 
 # Обновление системы и установка необходимых пакетов
+echo
+echo -e "    ${GREEN}Обновление системы и установка необходимых пакетов.${NC}"
+echo
 apt update &&  apt upgrade -y &&  apt install curl -y &&  apt install sudo -y
 
 # Пароль для пользователя xkeen
-clear
 echo
-echo -e "    ${GREEN}Придумайте пароль для пользователя xkeen${NC}"
+echo -e "    ${GREEN}Придумайте и запомните пароль для пользователя ${RED}xkeen${GREEN}.${NC}"
 echo
-echo -e "    ${RED}Символы не будут отображаться при вводе - это нормально.${NC}"
+echo -e "    ${RED}Подсказка: ${GREEN}Символы не будут отображаться при вводе пароля - это нормально.${NC}"
 echo
 
-# Создание нового пользователя xkeen
+# Добавление пользователя xkeen
  deluser xkeen > /dev/null
  rm -rf /home/xkeen
  adduser --gecos "" xkeen
@@ -32,13 +34,9 @@ echo
 sed -i '/^xkeen/d' /etc/sudoers
 echo 'xkeen ALL=(ALL:ALL) ALL' | sudo EDITOR='tee -a' visudo
 
-
-# Эквивалент скрипта optimise_server.sh с исправлениями
-# Проверяем наличие модуля BBR
-if ! sysctl net.ipv4.tcp_available_congestion_control | grep -q 'bbr'; then
-    sed -i '/tcp_bbr/d' /etc/modules-load.d/modules.conf
-    echo "tcp_bbr" >> /etc/modules-load.d/modules.conf 2>/dev/null
-fi
+# Добавляем модуль BBR
+sed -i '/.*tcp_bbr.*/d' /etc/modules-load.d/modules.conf
+echo "tcp_bbr" >> /etc/modules-load.d/modules.conf
 
 # Функция удаления существующих записей
 remove_existing() {
@@ -47,7 +45,7 @@ remove_existing() {
     done
 }
 
-# Удаляем существующие записи из файла sysctl.conf
+# Удаление существующих записей из файла /etc/sysctl.conf
 cat <<EOF | remove_existing
 fs.inotify.max_user_instances
 net.core.default_qdisc
@@ -106,23 +104,24 @@ EOF
 # Применяем настройки
 sysctl -p
 
-# Изменение порта SSH в файле конфигурации
-clear
-read -p "Введите желаемый порт SSH: " ssh_port
+# Смена порта SSH по выбору пользователя
+echo
+read -p "$(echo -e "    ${GREEN}В целях безопасности укажите новый порт SSH:${NC} ")" ssh_port
 sed -i "s/^#*Port [0-9]\+/Port $ssh_port/" /etc/ssh/sshd_config
 
-# Запрет авторизации SSH через пользователя root
+# Запрет авторизации SSH под root
 sed -i -E 's/#?PermitRootLogin\s+(yes|no)/PermitRootLogin no/g' /etc/ssh/sshd_config
 
-# Вывод информации и перезапуск
+# Вывод итоговой информации
 clear
 echo
+echo -e "    ${BLUE}Выполнена оптимизация сетевых подключений.${NC}"
 echo -e "    ${BLUE}Включен BBR.${NC}"
-echo -e "    ${BLUE}Выполнена оптимизация сервера.${NC}"
+echo -e "    ${BLUE}Пользователю ${RED}xkeen ${BLUE}присвоены root права.${NC}"
 echo
-echo -e "    ${RED}!!!ВНИМАНИЕ!!!${NC}"
-echo -e "    ${GREEN}Порт подключения SSH изменен на:${NC} ${RED}$ssh_port${NC}"
-echo -e "    ${GREEN}Пользователю ${RED}root${NC} ${GREEN}подключение по SSH${NC} ${RED}заблокированно${NC}"
+echo -e "    ${RED}Обратите внимание:${NC}"
+echo -e "    ${GREEN}Подключение по SSH под ${RED}root ${GREEN}заблокировано.${NC}"
+echo -e "    ${GREEN}Порт подключения SSH изменен на: ${RED}$ssh_port${GREEN}.${NC}"
 echo
 # Обратный отсчет
 for ((i=10; i>=0; i--)); do
