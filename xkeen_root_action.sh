@@ -105,7 +105,7 @@ EOF
 sysctl -p
 
 # Смена порта SSH по выбору пользователя
-# echo
+echo
 read -p "$(echo -e "    ${GREEN}В целях безопасности укажите новый порт SSH:${NC} ")" ssh_port
 sed -i "s/^#*Port [0-9]\+/Port $ssh_port/" /etc/ssh/sshd_config
 
