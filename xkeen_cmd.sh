@@ -16,7 +16,9 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Смена порта SSH по выбору пользователя
+echo For security purposes, specify a new SSH port
 echo
+read -p 'For security purposes, specify a new SSH port: ' sshport
 read -p 'В целях безопасности укажите новый порт SSH: ' sshport
 sed -i "s/^#*Port [0-9]\+/Port $sshport/" /etc/ssh/sshd_config
 
