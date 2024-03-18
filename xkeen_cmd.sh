@@ -36,7 +36,7 @@ echo 'xkeen ALL=(ALL:ALL) ALL' | sudo EDITOR='tee -a' visudo
 
 # Смена порта SSH по выбору пользователя
 echo
-read -p "$(echo В целях безопасности укажите новый порт SSH:)" ssh_port
+read -p "В целях безопасности укажите новый порт SSH: " ssh_port
 sed -i "s/^#*Port [0-9]\+/Port $ssh_port/" /etc/ssh/sshd_config
 
 # Запрет авторизации SSH под root
