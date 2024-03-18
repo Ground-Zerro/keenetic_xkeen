@@ -39,8 +39,8 @@ echo 'xkeen ALL=(ALL:ALL) ALL' | sudo EDITOR='tee -a' visudo
 
 # Смена порта SSH по выбору пользователя
 echo
-read -p "В целях безопасности укажите новый порт SSH: " ssh_port
-sed -i "s/^#*Port [0-9]\+/Port $ssh_port/" /etc/ssh/sshd_config
+read -p 'В целях безопасности укажите новый порт SSH: ' sshport
+sed -i "s/^#*Port [0-9]\+/Port $sshport/" /etc/ssh/sshd_config
 
 # Запрет авторизации SSH под root
 sed -i -E 's/#?PermitRootLogin\s+(yes|no)/PermitRootLogin no/g' /etc/ssh/sshd_config
@@ -124,7 +124,7 @@ echo -e "    ${BLUE}Пользователю ${RED}xkeen ${BLUE}присвоен
 echo
 echo -e "    ${RED}Обратите внимание:${NC}"
 echo -e "    ${GREEN}Подключение по SSH под ${RED}root ${GREEN}заблокировано.${NC}"
-echo -e "    ${GREEN}Порт подключения SSH изменен на: ${RED}$ssh_port${GREEN}.${NC}"
+echo -e "    ${GREEN}Порт подключения SSH изменен на: ${RED}$sshport${GREEN}.${NC}"
 echo
 # Обратный отсчет
 for ((i=10; i>=0; i--)); do
